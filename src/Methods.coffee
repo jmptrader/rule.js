@@ -1,5 +1,5 @@
 ((r) ->
 	meths =
-		//= require "MethodsList"
-	//= require "MethodsSetup"
+		#= require "MethodsList"
+	#= require "MethodsSetup"
 )(rule)

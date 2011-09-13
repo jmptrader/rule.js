@@ -72,14 +72,14 @@ rule.U = (->
 			__delayedId = setTimeout f, timeout
 
 	if lib is 'jquery'
-		//= require "UtiljQuery"
+		#= require "UtiljQuery"
 	else if lib is 'prototype'
-		//= require "UtilPrototype"
+		#= require "UtilPrototype"
 	else if lib is 'ender'
-		//= require "UtilEnder"
+		#= require "UtilEnder"
 	else
 		throw "PrototypeJS or jQuery required for rule.js"
 
-	//= require "UtilFunctionMap"
+	#= require "UtilFunctionMap"
 
 )()

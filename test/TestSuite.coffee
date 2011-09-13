@@ -23,12 +23,12 @@ classNames = (elementId) ->
 		e = elementId
 	e.className
 
-//= require "UtilTest"
-//= require "UtilAsyncTest"
-//= require "MethodsEventTest"
-//= require "MethodsSimpleElementsActionsTest"
-//= require "MethodsSimpleElementsConditionsTest"
-//= require "RuleRootCallTest"
+#= require "UtilTest"
+#= require "UtilAsyncTest"
+#= require "MethodsEventTest"
+#= require "MethodsSimpleElementsActionsTest"
+#= require "MethodsSimpleElementsConditionsTest"
+#= require "RuleRootCallTest"
 
-//= require "classes/ClassesTestSuite"
-//= require "functional/FunctionalTestSuite"
+#= require "classes/ClassesTestSuite"
+#= require "functional/FunctionalTestSuite"
