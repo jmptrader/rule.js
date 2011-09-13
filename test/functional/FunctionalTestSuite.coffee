@@ -1,0 +1,5 @@
+//= require "SimpleFunctionalTest"
+//= require "SimpleConditionalFunctionalTest"
+//= require "ComplexConditionsFunctionalTest"
+//= require "FormFieldValidatorFunctionalTest"	
+//= require "DelayedEventHandlingTest"

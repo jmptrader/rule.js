@@ -1,0 +1,14 @@
+{
+	"name": "rule",
+	"description": "Define complex UI rules in a simple CoffeeScript DSL",
+	"version": "0.1.0",
+	"keywords": ["rule", "rule", "coffeescript", "dsl", "ender"],
+	"homepage": "http://rod.vagg.org",
+	"authors": ["Rod Vagg"],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/rvagg/rule.git"
+	},
+	"main": "./dist/rule.js",
+	"ender": "./ender.js"
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!-- run with -Dcoffee.exe=<path to coffee> for faster build -->
+<project name="FeedXLWebsite" default="main" basedir=".">
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<fileset file="${basedir}/../build-dep/ant-contrib-1.0b3.jar" />
+		</classpath>
+	</taskdef>
+	<taskdef name="sprocketize" classname="org.vagg.jsprockets.SprocketizeTask">
+		<classpath>
+			<fileset file="${basedir}/../build-dep/jsprockets.jar" />
+		</classpath>
+	</taskdef>
+
+	<property name="testSuite.coffee" value="TestSuite.coffee" />
+	<property name="testSuite.out" value="testSuite.js" />
+	<property name="build.dir" value="${basedir}/../test-build/" />
+	<property name="jcoffee.jar" value="${basedir}/../build-dep/jcoffeescript-0.9.6.jar" />
+
+	<target name="main">
+		<echo message="running jsprockets to bundle script" />
+		<sprocketize mode="coffeescript" inputfile="${basedir}/${testSuite.coffee}" outputfile="${build.dir}/_sproketizedTestSuite.coffee" />
+		<condition property="coffeescript.available">
+			<isset property="coffee.exe" />
+		</condition>
+		<if>
+			<equals arg1="${coffeescript.available}" arg2="true" />
+			<then>
+				<echo message="executing ${coffee.exe}" />
+				<exec executable="${coffee.exe}">
+					<arg value="-b" />
+					<arg value="-c" />
+					<arg value="${build.dir}/_sproketizedTestSuite.coffee" />
+				</exec>
+				<move file="${build.dir}/_sproketizedTestSuite.js" tofile="${build.dir}/testSuite.js" />
+			</then>
+			<else>
+				<echo message="executing jcoffee" />
+				<java classpath="${jcoffee.jar}" classname="org.jcoffeescript.Main" input="${build.dir}/_sproketizedTestSuite.coffee" output="${build.dir}/${testSuite.out}" fork="false" />
+			</else>
+		</if>
+		<delete file="${build.dir}/_sproketizedTestSuite.coffee" />
+	</target>
+</project>
