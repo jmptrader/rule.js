@@ -2700,12 +2700,12 @@ testCase(DelayedEventHandlingTest, 'delayed event handle', function(queue) {
     }, this));
     return window.setTimeout(f, 40);
   }, this));
-  return queue.call("5: test delayed invoked at 140ms", __bind(function(callbacks) {
+  return queue.call("5: test delayed invoked at 200ms", __bind(function(callbacks) {
     var f;
     f = callbacks.add(__bind(function() {
       return assertTrue("should be visible by now", this.U.isVisible(this.tEle));
     }, this));
-    return window.setTimeout(f, 90);
+    return window.setTimeout(f, 150);
   }, this));
 });
 testCase(DelayedEventHandlingTest, 'cumulativeDelayed event handle, no additional events', function(queue) {
@@ -2730,12 +2730,12 @@ testCase(DelayedEventHandlingTest, 'cumulativeDelayed event handle, no additiona
     }, this));
     return window.setTimeout(f, 40);
   }, this));
-  return queue.call("5: test delayed invoked at 140ms", __bind(function(callbacks) {
+  return queue.call("5: test delayed invoked at 200ms", __bind(function(callbacks) {
     var f;
     f = callbacks.add(__bind(function() {
       return assertTrue("should be visible by now", this.U.isVisible(this.tEle));
     }, this));
-    return window.setTimeout(f, 90);
+    return window.setTimeout(f, 150);
   }, this));
 });
 testCase(DelayedEventHandlingTest, 'cumulativeDelayed event handle, additional events', function(queue) {
@@ -2785,11 +2785,11 @@ testCase(DelayedEventHandlingTest, 'cumulativeDelayed event handle, additional e
     }, this));
     return window.setTimeout(f, 20);
   }, this));
-  return queue.call("8: test delayed invoked at 200ms", __bind(function(callbacks) {
+  return queue.call("8: test delayed invoked at 250ms", __bind(function(callbacks) {
     var f;
     f = callbacks.add(__bind(function() {
       return assertTrue("should be visible by now", this.U.isVisible(this.tEle));
     }, this));
-    return window.setTimeout(f, 80);
+    return window.setTimeout(f, 130);
   }, this));
 });

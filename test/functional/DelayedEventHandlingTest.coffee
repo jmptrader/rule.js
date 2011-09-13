@@ -34,10 +34,10 @@ testCase DelayedEventHandlingTest, 'delayed event handle', (queue) ->
 			@U.fire @eEle, 'delay:event' # shouldn't do a cumulative, test it out to make sure it doesn't add another 100ms
 			assertFalse "shouldn't be visible at 50ms", @U.isVisible @tEle
 		window.setTimeout f, 40
-	queue.call "5: test delayed invoked at 140ms", (callbacks) =>
+	queue.call "5: test delayed invoked at 200ms", (callbacks) =>
 		f = callbacks.add =>
 			assertTrue "should be visible by now", @U.isVisible @tEle
-		window.setTimeout f, 90
+		window.setTimeout f, 150
 
 testCase DelayedEventHandlingTest, 'cumulativeDelayed event handle, no additional events', (queue) ->
 	expectAsserts 4
@@ -54,10 +54,10 @@ testCase DelayedEventHandlingTest, 'cumulativeDelayed event handle, no additiona
 		f = callbacks.add =>
 			assertFalse "shouldn't be visible at 50ms", @U.isVisible @tEle
 		window.setTimeout f, 40
-	queue.call "5: test delayed invoked at 140ms", (callbacks) =>
+	queue.call "5: test delayed invoked at 200ms", (callbacks) =>
 		f = callbacks.add =>
 			assertTrue "should be visible by now", @U.isVisible @tEle
-		window.setTimeout f, 90
+		window.setTimeout f, 150
 
 testCase DelayedEventHandlingTest, 'cumulativeDelayed event handle, additional events', (queue) ->
 	expectAsserts 7
@@ -90,8 +90,8 @@ testCase DelayedEventHandlingTest, 'cumulativeDelayed event handle, additional e
 		f = callbacks.add =>
 			assertFalse "shouldn't be visible at 120ms", @U.isVisible @tEle
 		window.setTimeout f, 20
-	queue.call "8: test delayed invoked at 200ms", (callbacks) =>
+	queue.call "8: test delayed invoked at 250ms", (callbacks) =>
 		f = callbacks.add =>
 			assertTrue "should be visible by now", @U.isVisible @tEle
-		window.setTimeout f, 80
+		window.setTimeout f, 130
 
