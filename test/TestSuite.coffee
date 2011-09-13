@@ -23,8 +23,6 @@ classNames = (elementId) ->
 		e = elementId
 	e.className
 
-#= require "UtilTest"
-#= require "UtilAsyncTest"
 #= require "MethodsEventTest"
 #= require "MethodsSimpleElementsActionsTest"
 #= require "MethodsSimpleElementsConditionsTest"

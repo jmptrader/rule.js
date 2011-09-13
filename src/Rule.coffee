@@ -9,7 +9,12 @@
 		version: '0.1'
 		author: 'Rod Vagg <rod@vagg.org> @rvagg'
 	
-	#= require "Util"
+	rule.U = (->
+		module = { exports: {} }
+		#= require "../clue"
+		module.exports
+	)()
+	#= Xrequire "Util"
 	#= require "classes/Classes"
 	#= require "Methods"
 

@@ -28,436 +28,459 @@
       author: 'Rod Vagg <rod@vagg.org> @rvagg'
     };
     rule.U = (function() {
-      var addClass, bind, cumulativeDelayed, delayed, domReady, each, element, elements, extend, fieldValue, fire, formSerializers, hasClass, hide, invoke, isArray, isFloat, isFunction, isInt, isRegex, isString, isVisible, lib, observe, removeClass, show, styleValue, toArray, toggle, toggleClass, trim;
-      lib = typeof Prototype !== "undefined" && Prototype !== null ? 'prototype' : typeof jQuery !== "undefined" && jQuery !== null ? 'jquery' : typeof ender !== "undefined" && ender !== null ? 'ender' : 'unknown';
-      styleValue = function(e, key) {};
-      isFunction = function(f) {
-        return Object.prototype.toString.call(f) === '[object Function]';
+      var module;
+      module = {
+        exports: {}
       };
-      isString = function(s) {
-        return Object.prototype.toString.call(s) === '[object String]';
-      };
-      isArray = function(a) {
-        return Object.prototype.toString.call(a) === '[object Array]';
-      };
-      isRegex = function(a) {
-        return Object.prototype.toString.call(a) === '[object RegExp]';
-      };
-      toArray = function(a) {
-        var length, ret;
-        if (!(a != null)) {
-          return null;
-        }
-        if (Object(a)['toArray'] != null) {
-          return a.toArray();
-        }
-        ret = new Array(length = a.length || 0);
-        while (length--) {
-          ret[length] = a[length];
-        }
-        return ret;
-      };
-      bind = function(f, ctx) {
-        return function() {
-          return f.apply(ctx, arguments);
-        };
-      };
-      toggleClass = function(e, c) {
-        if (hasClass(e, c)) {
-          return removeClass(e, c);
+      (function(name, definition) {
+        if (typeof define === 'function') {
+          return define(definition);
+        } else if (typeof module !== 'undefined' && module.exports) {
+          return module.exports = definition();
         } else {
-          return addClass(e, c);
+          return this[name] = definition();
         }
-      };
-      invoke = function() {
-        var args, arr, e, func, _i, _len, _results;
-        args = toArray(arguments);
-        arr = args.shift();
-        func = args.shift();
-        _results = [];
-        for (_i = 0, _len = arr.length; _i < _len; _i++) {
-          e = arr[_i];
-          _results.push(e[func].apply(e, args));
-        }
-        return _results;
-      };
-      each = function(arr, func, args) {
-        var e, _i, _len;
-        for (_i = 0, _len = arr.length; _i < _len; _i++) {
-          e = arr[_i];
-          func.apply(null, [e].concat(args));
-        }
-        return true;
-      };
-      extend = function(dst, src) {
-        var key, value;
-        if (!(dst != null)) {
-          return null;
-        }
-        if (!(src != null)) {
-          return dst;
-        }
-        for (key in src) {
-          value = src[key];
-          dst[key] = value;
-        }
-        return dst;
-      };
-      trim = function(s) {
-        if (s != null) {
-          s = /^\s*(.*)$/.exec(s.replace(/^(.*\S)\s*$/, '$1'))[1];
-        }
-        return s;
-      };
-      isInt = function(s) {
-        if (s.indexOf(' ') !== -1) {
-          return false;
-        }
-        if (s === '' || parseInt(s, 10) !== (s * 1)) {
-          return false;
-        }
-        return true;
-      };
-      isFloat = function(s) {
-        if (s.indexOf(' ') !== -1) {
-          return false;
-        }
-        if (s === '' || parseFloat(s, 10) !== (s * 1)) {
-          return false;
-        }
-        return true;
-      };
-      isVisible = function(e) {
-        while (e && e.parentNode) {
-          if (styleValue(e, 'display') === 'none') {
-            return false;
-          }
-          e = e.parentNode;
-        }
-        return true;
-      };
-      delayed = function() {
-        var args, f, func, timeout;
-        args = toArray(arguments);
-        func = args.shift();
-        timeout = args.shift() * 1000;
-        f = function() {
-          return func.apply(func, args);
-        };
-        return function() {
-          return setTimeout(f, timeout);
-        };
-      };
-      cumulativeDelayed = function() {
-        var args, func, timeout, __delayedId;
-        args = toArray(arguments);
-        func = args.shift();
-        timeout = args.shift() * 1000;
-        __delayedId = null;
-        return function() {
-          var f, _args;
-          _args = args.concat(toArray(arguments));
-          if (__delayedId !== null) {
-            clearTimeout(__delayedId);
-          }
-          f = function() {
-            return func.apply(f, _args);
+      })('clue', function() {
+        var clue;
+        clue = (function() {
+          var addClass, bind, cumulativeDelayed, delayed, domReady, each, element, elements, extend, fieldValue, fire, formSerializers, hasClass, hide, invoke, isArray, isFloat, isFunction, isInt, isRegex, isString, isVisible, observe, removeClass, show, styleValue, toArray, toggle, toggleClass, trim;
+          isFunction = function(f) {
+            return Object.prototype.toString.call(f) === '[object Function]';
           };
-          return __delayedId = setTimeout(f, timeout);
-        };
-      };
-      if (lib === 'jquery') {
-        elements = jQuery;
-        element = function(id) {
-          var ele;
-          if (!(id != null) || !isString(id) || id.length === 0) {
-            return null;
-          }
-          if (id.charAt(0) !== '#') {
-            id = '#' + id;
-          }
-          ele = elements(id);
-          if (ele.length > 0) {
-            return ele[0];
-          }
-          return null;
-        };
-        observe = function(ele, event, listener) {
-          return jQuery(ele).bind(event, listener);
-        };
-        fire = function(ele, event, memo) {
-          return jQuery(ele).trigger(event, memo);
-        };
-        show = function(e) {
-          return jQuery(e).show();
-        };
-        hide = function(e) {
-          return jQuery(e).hide();
-        };
-        toggle = function(e) {
-          return jQuery(e).toggle();
-        };
-        hasClass = function(e, c) {
-          return jQuery(e).hasClass(c);
-        };
-        addClass = function(e, c) {
-          return jQuery(e).addClass(c);
-        };
-        removeClass = function(e, c) {
-          return jQuery(e).removeClass(c);
-        };
-        domReady = function(f) {
-          return jQuery.ready(f);
-        };
-        fieldValue = function(elements) {
-          var ele, key, ret, value, _i, _len, _ref;
-          ret = [];
-          _ref = elements.serializeArray();
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            ele = _ref[_i];
-            for (key in ele) {
-              value = ele[key];
-              if (key === 'value') {
-                ret.push(value);
-              }
-            }
-          }
-          switch (ret.length) {
-            case 0:
+          isString = function(s) {
+            return Object.prototype.toString.call(s) === '[object String]';
+          };
+          isArray = function(a) {
+            return Object.prototype.toString.call(a) === '[object Array]';
+          };
+          isRegex = function(a) {
+            return Object.prototype.toString.call(a) === '[object RegExp]';
+          };
+          toArray = function(a) {
+            var length, ret;
+            if (!(a != null)) {
               return null;
-            case 1:
-              return ret[0];
-            default:
-              return ret;
-          }
-        };
-        styleValue = function(e, key) {
-          return jQuery.css(e, key);
-        };
-      } else if (lib === 'prototype') {
-        elements = $$;
-        element = function(id) {
-          if (!(id != null) || !isString(id)) {
-            return null;
-          }
-          if (id.charAt(0) === '#') {
-            id = id.substring(1);
-          }
-          return $(id);
-        };
-        observe = function(ele, event, listener) {
-          var ob;
-          ob = function(e) {
-            return Event.observe(e, event, listener);
-          };
-          if (isString(ele)) {
-            return elements(ele).each(ob);
-          } else {
-            return ob(ele);
-          }
-        };
-        fire = function(ele, event, memo) {
-          var f;
-          f = function(e) {
-            return Element.fire(e, event, memo);
-          };
-          if (Object.isString(ele)) {
-            return elements(ele).each(f);
-          } else {
-            return f(ele);
-          }
-        };
-        hasClass = Element.hasClassName;
-        show = Element.show;
-        hide = Element.hide;
-        toggle = Element.toggle;
-        addClass = Element.addClassName;
-        removeClass = Element.removeClassName;
-        domReady = function(f) {
-          return document.observe('dom:loaded', f);
-        };
-        fieldValue = function(elements) {
-          var key, ret, value, _ref;
-          ret = [];
-          _ref = Form.serializeElements(elements, {
-            hash: true
-          });
-          for (key in _ref) {
-            value = _ref[key];
-            ret.push(value);
-          }
-          switch (ret.length) {
-            case 0:
-              return null;
-            case 1:
-              return ret[0];
-            default:
-              return ret;
-          }
-        };
-        styleValue = function(e, key) {
-          return $(e).getStyle(key);
-        };
-      } else if (lib === 'ender') {
-        elements = ender;
-        element = function(id) {
-          var ele;
-          if (!(id != null) || !isString(id) || id.length === 0) {
-            return null;
-          }
-          if (id.charAt(0) !== '#') {
-            id = '#' + id;
-          }
-          ele = elements(id);
-          if (ele.length > 0) {
-            return ele[0];
-          }
-          return null;
-        };
-        observe = function(ele, event, listener) {
-          return ender(ele).bind(event, listener);
-        };
-        fire = function(ele, event, memo) {
-          return ender(ele).emit(event, memo);
-        };
-        show = function(e) {
-          return ender(e).show();
-        };
-        hide = function(e) {
-          return ender(e).hide();
-        };
-        toggle = function(e) {
-          return ender(e).toggle();
-        };
-        hasClass = function(e, c) {
-          return ender(e).hasClass(c);
-        };
-        addClass = function(e, c) {
-          return ender(e).addClass(c);
-        };
-        removeClass = function(e, c) {
-          return ender(e).removeClass(c);
-        };
-        domReady = function(f) {
-          return ender.domReady(f);
-        };
-        fieldValue = function(elements) {
-          var e, ret, value, _i, _len;
-          ret = [];
-          for (_i = 0, _len = elements.length; _i < _len; _i++) {
-            e = elements[_i];
-            value = formSerializers[e.tagName.toLowerCase()](e);
-            if (value !== null) {
-              ret.push(value);
             }
-          }
-          switch (ret.length) {
-            case 0:
-              return null;
-            case 1:
-              return ret[0];
-            default:
-              return ret;
-          }
-        };
-        styleValue = function(e, key) {
-          return ender(e).css(key);
-        };
-        formSerializers = (function() {
-          var input, inputSelector, optionValue, select, selectMany, selectOne, valueSelector;
-          input = function(e) {
-            var type;
-            if ((type = e.type.toLowerCase()) === 'checkbox' || type === 'radio') {
-              return inputSelector(e);
+            if (Object(a)['toArray'] != null) {
+              return a.toArray();
             }
-            return valueSelector(e);
+            ret = new Array(length = a.length || 0);
+            while (length--) {
+              ret[length] = a[length];
+            }
+            return ret;
           };
-          inputSelector = function(e) {
-            if (e.checked) {
-              return e.value;
+          bind = function(f, ctx) {
+            return function() {
+              return f.apply(ctx, arguments);
+            };
+          };
+          toggleClass = function(e, c) {
+            if (hasClass(e, c)) {
+              return removeClass(e, c);
             } else {
-              return null;
+              return addClass(e, c);
             }
           };
-          valueSelector = function(e) {
-            return e.value;
-          };
-          select = function(e) {
-            if (e.type.toLowerCase() === 'select-one') {
-              return selectOne(e);
-            } else {
-              return selectMany(e);
-            }
-          };
-          selectOne = function(e) {
-            var i;
-            if ((i = e.selectedIndex) >= 0) {
-              return optionValue(e.options[i]);
-            } else {
-              return null;
-            }
-          };
-          selectMany = function(e) {
-            var o, values, _i, _len, _ref, _results;
-            if (!(e.length != null)) {
-              return null;
-            }
-            values = [];
-            _ref = e.options(where(o.selected));
+          invoke = function() {
+            var args, arr, e, func, _i, _len, _results;
+            args = toArray(arguments);
+            arr = args.shift();
+            func = args.shift();
             _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              o = _ref[_i];
-              _results.push(values.push(optionValue(o)));
+            for (_i = 0, _len = arr.length; _i < _len; _i++) {
+              e = arr[_i];
+              _results.push(e[func].apply(e, args));
             }
             return _results;
           };
-          optionValue = function(e) {
-            if (e.value != null) {
-              return e.value;
-            } else {
-              return e.text;
+          each = function(arr, func, args) {
+            var e, _i, _len;
+            for (_i = 0, _len = arr.length; _i < _len; _i++) {
+              e = arr[_i];
+              func.apply(null, [e].concat(args));
             }
+            return true;
           };
+          extend = function(dst, src) {
+            var key, value;
+            if (!(dst != null)) {
+              return null;
+            }
+            if (!(src != null)) {
+              return dst;
+            }
+            for (key in src) {
+              value = src[key];
+              dst[key] = value;
+            }
+            return dst;
+          };
+          trim = function(s) {
+            if (s != null) {
+              s = /^\s*(.*)$/.exec(s.replace(/^(.*\S)\s*$/, '$1'))[1];
+            }
+            return s;
+          };
+          isInt = function(s) {
+            if (s.indexOf(' ') !== -1) {
+              return false;
+            }
+            if (s === '' || parseInt(s, 10) !== (s * 1)) {
+              return false;
+            }
+            return true;
+          };
+          isFloat = function(s) {
+            if (s.indexOf(' ') !== -1) {
+              return false;
+            }
+            if (s === '' || parseFloat(s, 10) !== (s * 1)) {
+              return false;
+            }
+            return true;
+          };
+          isVisible = function(e) {
+            while (e && e.parentNode) {
+              if (styleValue(e, 'display') === 'none') {
+                return false;
+              }
+              e = e.parentNode;
+            }
+            return true;
+          };
+          delayed = function() {
+            var args, f, func, timeout;
+            args = toArray(arguments);
+            func = args.shift();
+            timeout = args.shift() * 1000;
+            f = function() {
+              return func.apply(func, args);
+            };
+            return function() {
+              return setTimeout(f, timeout);
+            };
+          };
+          cumulativeDelayed = function() {
+            var args, func, timeout, __delayedId;
+            args = toArray(arguments);
+            func = args.shift();
+            timeout = args.shift() * 1000;
+            __delayedId = null;
+            return function() {
+              var f, _args;
+              _args = args.concat(toArray(arguments));
+              if (__delayedId !== null) {
+                clearTimeout(__delayedId);
+              }
+              f = function() {
+                return func.apply(f, _args);
+              };
+              return __delayedId = setTimeout(f, timeout);
+            };
+          };
+          if (typeof Prototype !== "undefined" && Prototype !== null) {
+            elements = $$;
+            element = function(id) {
+              if (!(id != null) || !isString(id)) {
+                return null;
+              }
+              if (id.charAt(0) === '#') {
+                id = id.substring(1);
+              }
+              return $(id);
+            };
+            observe = function(ele, event, listener) {
+              var ob;
+              ob = function(e) {
+                return Event.observe(e, event, listener);
+              };
+              if (isString(ele)) {
+                return elements(ele).each(ob);
+              } else {
+                return ob(ele);
+              }
+            };
+            fire = function(ele, event, memo) {
+              var f;
+              f = function(e) {
+                return Element.fire(e, event, memo);
+              };
+              if (Object.isString(ele)) {
+                return elements(ele).each(f);
+              } else {
+                return f(ele);
+              }
+            };
+            hasClass = Element.hasClassName;
+            show = Element.show;
+            hide = Element.hide;
+            toggle = Element.toggle;
+            addClass = Element.addClassName;
+            removeClass = Element.removeClassName;
+            domReady = function(f) {
+              return document.observe('dom:loaded', f);
+            };
+            fieldValue = function(elements) {
+              var key, ret, value, _ref;
+              ret = [];
+              _ref = Form.serializeElements(elements, {
+                hash: true
+              });
+              for (key in _ref) {
+                value = _ref[key];
+                ret.push(value);
+              }
+              switch (ret.length) {
+                case 0:
+                  return null;
+                case 1:
+                  return ret[0];
+                default:
+                  return ret;
+              }
+            };
+            styleValue = function(e, key) {
+              return $(e).getStyle(key);
+            };
+          } else if (typeof jQuery !== "undefined" && jQuery !== null) {
+            elements = jQuery;
+            element = function(id) {
+              var ele;
+              if (!(id != null) || !isString(id) || id.length === 0) {
+                return null;
+              }
+              if (id.charAt(0) !== '#') {
+                id = '#' + id;
+              }
+              ele = elements(id);
+              if (ele.length > 0) {
+                return ele[0];
+              }
+              return null;
+            };
+            observe = function(ele, event, listener) {
+              return jQuery(ele).bind(event, listener);
+            };
+            fire = function(ele, event, memo) {
+              return jQuery(ele).trigger(event, memo);
+            };
+            show = function(e) {
+              return jQuery(e).show();
+            };
+            hide = function(e) {
+              return jQuery(e).hide();
+            };
+            toggle = function(e) {
+              return jQuery(e).toggle();
+            };
+            hasClass = function(e, c) {
+              return jQuery(e).hasClass(c);
+            };
+            addClass = function(e, c) {
+              return jQuery(e).addClass(c);
+            };
+            removeClass = function(e, c) {
+              return jQuery(e).removeClass(c);
+            };
+            domReady = function(f) {
+              return jQuery.ready(f);
+            };
+            fieldValue = function(elements) {
+              var ele, key, ret, value, _i, _len, _ref;
+              ret = [];
+              _ref = elements.serializeArray();
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                ele = _ref[_i];
+                for (key in ele) {
+                  value = ele[key];
+                  if (key === 'value') {
+                    ret.push(value);
+                  }
+                }
+              }
+              switch (ret.length) {
+                case 0:
+                  return null;
+                case 1:
+                  return ret[0];
+                default:
+                  return ret;
+              }
+            };
+            styleValue = function(e, key) {
+              return jQuery.css(e, key);
+            };
+          } else if (typeof ender !== "undefined" && ender !== null) {
+            elements = ender;
+            element = function(id) {
+              var ele;
+              if (!(id != null) || !isString(id) || id.length === 0) {
+                return null;
+              }
+              if (id.charAt(0) !== '#') {
+                id = '#' + id;
+              }
+              ele = elements(id);
+              if (ele.length > 0) {
+                return ele[0];
+              }
+              return null;
+            };
+            observe = function(ele, event, listener) {
+              return ender(ele).bind(event, listener);
+            };
+            fire = function(ele, event, memo) {
+              return ender(ele).emit(event, memo);
+            };
+            show = function(e) {
+              return ender(e).show();
+            };
+            hide = function(e) {
+              return ender(e).hide();
+            };
+            toggle = function(e) {
+              return ender(e).toggle();
+            };
+            hasClass = function(e, c) {
+              return ender(e).hasClass(c);
+            };
+            addClass = function(e, c) {
+              return ender(e).addClass(c);
+            };
+            removeClass = function(e, c) {
+              return ender(e).removeClass(c);
+            };
+            domReady = function(f) {
+              return ender.domReady(f);
+            };
+            fieldValue = function(elements) {
+              var e, ret, value, _i, _len;
+              ret = [];
+              for (_i = 0, _len = elements.length; _i < _len; _i++) {
+                e = elements[_i];
+                value = formSerializers[e.tagName.toLowerCase()](e);
+                if (value !== null) {
+                  ret.push(value);
+                }
+              }
+              switch (ret.length) {
+                case 0:
+                  return null;
+                case 1:
+                  return ret[0];
+                default:
+                  return ret;
+              }
+            };
+            styleValue = function(e, key) {
+              return ender(e).css(key);
+            };
+            formSerializers = (function() {
+              var input, inputSelector, optionValue, select, selectMany, selectOne, valueSelector;
+              input = function(e) {
+                var type;
+                if ((type = e.type.toLowerCase()) === 'checkbox' || type === 'radio') {
+                  return inputSelector(e);
+                }
+                return valueSelector(e);
+              };
+              inputSelector = function(e) {
+                if (e.checked) {
+                  return e.value;
+                } else {
+                  return null;
+                }
+              };
+              valueSelector = function(e) {
+                return e.value;
+              };
+              select = function(e) {
+                if (e.type.toLowerCase() === 'select-one') {
+                  return selectOne(e);
+                } else {
+                  return selectMany(e);
+                }
+              };
+              selectOne = function(e) {
+                var i;
+                if ((i = e.selectedIndex) >= 0) {
+                  return optionValue(e.options[i]);
+                } else {
+                  return null;
+                }
+              };
+              selectMany = function(e) {
+                var o, values, _i, _len, _ref, _results;
+                if (!(e.length != null)) {
+                  return null;
+                }
+                values = [];
+                _ref = e.options(where(o.selected));
+                _results = [];
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                  o = _ref[_i];
+                  _results.push(values.push(optionValue(o)));
+                }
+                return _results;
+              };
+              optionValue = function(e) {
+                if (e.value != null) {
+                  return e.value;
+                } else {
+                  return e.text;
+                }
+              };
+              return {
+                input: input,
+                select: select,
+                textarea: valueSelector,
+                button: valueSelector
+              };
+            })();
+          } else {
+            throw "Clue.js must have one of Prototype, jQuery or Ender available in the execution environment";
+          }
           return {
-            input: input,
-            select: select,
-            textarea: valueSelector,
-            button: valueSelector
+            isFunction: isFunction,
+            isString: isString,
+            isArray: isArray,
+            isRegex: isRegex,
+            toArray: toArray,
+            elements: elements,
+            element: element,
+            observe: observe,
+            fire: fire,
+            bind: bind,
+            hasClass: hasClass,
+            show: show,
+            hide: hide,
+            toggle: toggle,
+            isVisible: isVisible,
+            addClass: addClass,
+            removeClass: removeClass,
+            toggleClass: toggleClass,
+            invoke: invoke,
+            each: each,
+            domReady: domReady,
+            styleValue: styleValue,
+            extend: extend,
+            fieldValue: fieldValue,
+            trim: trim,
+            isInt: isInt,
+            isFloat: isFloat,
+            delayed: delayed,
+            cumulativeDelayed: cumulativeDelayed
           };
         })();
-      } else {
-        throw "PrototypeJS or jQuery required for rule.js";
-      }
-      return {
-        isFunction: isFunction,
-        isString: isString,
-        isArray: isArray,
-        isRegex: isRegex,
-        toArray: toArray,
-        elements: elements,
-        element: element,
-        observe: observe,
-        fire: fire,
-        bind: bind,
-        hasClass: hasClass,
-        show: show,
-        hide: hide,
-        toggle: toggle,
-        isVisible: isVisible,
-        addClass: addClass,
-        removeClass: removeClass,
-        toggleClass: toggleClass,
-        invoke: invoke,
-        each: each,
-        domReady: domReady,
-        extend: extend,
-        fieldValue: fieldValue,
-        trim: trim,
-        isInt: isInt,
-        isFloat: isFloat,
-        delayed: delayed,
-        cumulativeDelayed: cumulativeDelayed
-      };
+        clue._meta = {
+          version: '0.1',
+          author: 'Rod Vagg <rod@vagg.org> @rvagg',
+          description: 'Simple unified utility interface to a variety of popular JavaScript libraries'
+        };
+        return clue;
+      });
+      return module.exports;
     })();
     rule.C = {};
     (function(c, u) {
