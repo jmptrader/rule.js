@@ -7,8 +7,8 @@
 	"authors": ["Rod Vagg"],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/rvagg/rule.git"
+		"url": "https://github.com/rvagg/rule.js.git"
 	},
-	"main": "./dist/rule.js",
+	"main": "./rule.clueless.ender.js",
 	"ender": "./ender.js"
 }

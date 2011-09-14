@@ -13,26 +13,43 @@
 	</taskdef>
 
 	<property name="main.coffee" value="Rule.coffee" />
+	<property name="main.clueless.coffee" value="RuleClueless.coffee" />
+	<property name="main.clueless.ender.coffee" value="RuleCluelessEnder.coffee" />
 	<property name="main.out" value="rule.js" />
+	<property name="main.clueless.out" value="rule.clueless.js" />
+	<property name="main.clueless.ender.out" value="rule.clueless.ender.js" />
 	<property name="build.dir" value="${basedir}/../" />
 	<property name="jcoffee.jar" value="${basedir}/../build-dep/jcoffeescript-0.9.6.jar" />
 
 	<target name="main">
 		<echo message="running jsprockets to bundle script" />
 		<sprocketize mode="coffeescript" inputfile="${basedir}/${main.coffee}" outputfile="${build.dir}/_sproketized.coffee" />
+		<sprocketize mode="coffeescript" inputfile="${basedir}/${main.clueless.coffee}" outputfile="${build.dir}/_sproketized.clueless.coffee" />
+		<sprocketize mode="coffeescript" inputfile="${basedir}/${main.clueless.ender.coffee}" outputfile="${build.dir}/_sproketized.clueless.ender.coffee" />
 		<condition property="coffeescript.available">
 			<isset property="coffee.exe" />
 		</condition>
 		<if>
 			<equals arg1="${coffeescript.available}" arg2="true" />
 			<then>
-				<echo message="executing ${coffee.exe}" />
 				<exec executable="${coffee.exe}">
 					<!-- <arg value="-b" /> -->
 					<arg value="-c" />
 					<arg value="${build.dir}/_sproketized.coffee" />
 				</exec>
 				<move file="${build.dir}/_sproketized.js" tofile="${build.dir}/${main.out}" />
+				<exec executable="${coffee.exe}">
+					<!-- <arg value="-b" /> -->
+					<arg value="-c" />
+					<arg value="${build.dir}/_sproketized.clueless.coffee" />
+				</exec>
+				<move file="${build.dir}/_sproketized.clueless.js" tofile="${build.dir}/${main.clueless.out}" />
+				<exec executable="${coffee.exe}">
+					<!-- <arg value="-b" /> -->
+					<arg value="-c" />
+					<arg value="${build.dir}/_sproketized.clueless.ender.coffee" />
+				</exec>
+				<move file="${build.dir}/_sproketized.clueless.ender.js" tofile="${build.dir}/${main.clueless.ender.out}" />
 			</then>
 			<else>
 				<echo message="executing jcoffee" />
@@ -40,5 +57,7 @@
 			</else>
 		</if>
 		<delete file="${build.dir}/_sproketized.coffee" />
+		<delete file="${build.dir}/_sproketized.clueless.coffee" />
+		<delete file="${build.dir}/_sproketized.clueless.ender.coffee" />
 	</target>
 </project>

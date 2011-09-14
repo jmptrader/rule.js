@@ -3,7 +3,7 @@ class c.ValidatorRegex extends c.ValidatorBase
 		if u.isString options
 			@regex = new RegExp options
 			options = {}
-		if u.isRegex options
+		if u.isRegExp options
 			@regex = options
 			options = {}
 		super t, @elements, options,
@@ -11,7 +11,7 @@ class c.ValidatorRegex extends c.ValidatorBase
 		if @options.regex?
 			if u.isString @options.regex
 				@regex = new RegExp(@options.regex, if @options.options? then @options.options else '')
-			if u.isRegex @options.regex
+			if u.isRegExp @options.regex
 				@regex = @options.regex
 	valid: (value) ->
 		value = @trim(value)

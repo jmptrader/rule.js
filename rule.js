@@ -42,8 +42,29 @@
         }
       })('clue', function() {
         var clue;
-        clue = (function() {
-          var addClass, bind, cumulativeDelayed, delayed, domReady, each, element, elements, extend, fieldValue, fire, formSerializers, hasClass, hide, invoke, isArray, isFloat, isFunction, isInt, isRegex, isString, isVisible, observe, removeClass, show, styleValue, toArray, toggle, toggleClass, trim;
+        clue = {
+          _meta: {
+            version: '0.1',
+            author: 'Rod Vagg <rod@vagg.org> @rvagg',
+            description: 'Simple unified utility interface to a variety of popular JavaScript libraries'
+          },
+          extend: function(dst, src) {
+            var key, value;
+            if (!(dst != null)) {
+              return null;
+            }
+            if (!(src != null)) {
+              return dst;
+            }
+            for (key in src) {
+              value = src[key];
+              dst[key] = value;
+            }
+            return dst;
+          }
+        };
+        clue.extend(clue, (function(clue) {
+          var bind, contains, cumulativeDelayed, delayed, each, invoke, isArray, isBoolean, isFloat, isFunction, isInt, isNumber, isPrimitive, isRegExp, isString, isVisible, toArray, toggleClass, trim;
           isFunction = function(f) {
             return Object.prototype.toString.call(f) === '[object Function]';
           };
@@ -53,8 +74,39 @@
           isArray = function(a) {
             return Object.prototype.toString.call(a) === '[object Array]';
           };
-          isRegex = function(a) {
+          isRegExp = function(a) {
             return Object.prototype.toString.call(a) === '[object RegExp]';
+          };
+          isBoolean = function(a) {
+            return Object.prototype.toString.call(a) === '[object Boolean]';
+          };
+          isNumber = function(a) {
+            return Object.prototype.toString.call(a) === '[object Number]';
+          };
+          isPrimitive = function(o) {
+            return (o != null) && (clue.isString(o) || clue.isNumber(o) || clue.isBoolean(o) || clue.isRegExp(o));
+          };
+          /*
+          				TODO: test these
+          				type = jQuery.type
+          				*/
+          isInt = function(s) {
+            if (s.indexOf(' ') !== -1) {
+              return false;
+            }
+            if (s === '' || parseInt(s, 10) !== (s * 1)) {
+              return false;
+            }
+            return true;
+          };
+          isFloat = function(s) {
+            if (s.indexOf(' ') !== -1) {
+              return false;
+            }
+            if (s === '' || parseFloat(s, 10) !== (s * 1)) {
+              return false;
+            }
+            return true;
           };
           toArray = function(a) {
             var length, ret;
@@ -76,12 +128,20 @@
             };
           };
           toggleClass = function(e, c) {
-            if (hasClass(e, c)) {
-              return removeClass(e, c);
+            if (clue.hasClass(e, c)) {
+              return clue.removeClass(e, c);
             } else {
-              return addClass(e, c);
+              return clue.addClass(e, c);
             }
           };
+          contains = function(e, a) {
+            return clue.indexOf(e, a) !== -1;
+          };
+          /*
+          				TODO: test these 2
+          				stopEvent = (e) -> e.stopPropagation()
+          				indexOf = jQuery.inArray
+          				*/
           invoke = function() {
             var args, arr, e, func, _i, _len, _results;
             args = toArray(arguments);
@@ -102,47 +162,15 @@
             }
             return true;
           };
-          extend = function(dst, src) {
-            var key, value;
-            if (!(dst != null)) {
-              return null;
-            }
-            if (!(src != null)) {
-              return dst;
-            }
-            for (key in src) {
-              value = src[key];
-              dst[key] = value;
-            }
-            return dst;
-          };
           trim = function(s) {
             if (s != null) {
               s = /^\s*(.*)$/.exec(s.replace(/^(.*\S)\s*$/, '$1'))[1];
             }
             return s;
           };
-          isInt = function(s) {
-            if (s.indexOf(' ') !== -1) {
-              return false;
-            }
-            if (s === '' || parseInt(s, 10) !== (s * 1)) {
-              return false;
-            }
-            return true;
-          };
-          isFloat = function(s) {
-            if (s.indexOf(' ') !== -1) {
-              return false;
-            }
-            if (s === '' || parseFloat(s, 10) !== (s * 1)) {
-              return false;
-            }
-            return true;
-          };
           isVisible = function(e) {
             while (e && e.parentNode) {
-              if (styleValue(e, 'display') === 'none') {
+              if (clue.styleValue(e, 'display') === 'none') {
                 return false;
               }
               e = e.parentNode;
@@ -179,10 +207,39 @@
               return __delayedId = setTimeout(f, timeout);
             };
           };
-          if (typeof Prototype !== "undefined" && Prototype !== null) {
+          return {
+            isFunction: isFunction,
+            isString: isString,
+            isArray: isArray,
+            isRegExp: isRegExp,
+            isBoolean: isBoolean,
+            isNumber: isNumber,
+            isPrimitive: isPrimitive,
+            isInt: isInt,
+            isFloat: isFloat,
+            toArray: toArray,
+            bind: bind,
+            toggleClass: toggleClass,
+            contains: contains,
+            invoke: invoke,
+            each: each,
+            trim: trim,
+            isVisible: isVisible,
+            delayed: delayed,
+            cumulativeDelayed: cumulativeDelayed
+          };
+        })(clue));
+        if (typeof Prototype !== "undefined" && Prototype !== null) {
+          clue.extend(clue, (function(clue) {
+            var addClass, domReady, element, elements, fieldValue, fire, hasClass, hide, indexOf, isArray, isFunction, isNumber, isString, observe, removeClass, show, stopEvent, styleValue, toggle, type;
+            isArray = Object.isArray;
+            isString = Object.isString;
+            isNumber = Object.isNumber;
+            isFunction = Object.isFunction;
+            type = Object.inspect;
             elements = $$;
             element = function(id) {
-              if (!(id != null) || !isString(id)) {
+              if (!(id != null) || !clue.isString(id)) {
                 return null;
               }
               if (id.charAt(0) === '#') {
@@ -195,7 +252,7 @@
               ob = function(e) {
                 return Event.observe(e, event, listener);
               };
-              if (isString(ele)) {
+              if (clue.isString(ele)) {
                 return elements(ele).each(ob);
               } else {
                 return ob(ele);
@@ -206,11 +263,15 @@
               f = function(e) {
                 return Element.fire(e, event, memo);
               };
-              if (Object.isString(ele)) {
+              if (clue.isString(ele)) {
                 return elements(ele).each(f);
               } else {
                 return f(ele);
               }
+            };
+            stopEvent = Event.stop;
+            indexOf = function(value, array) {
+              return Array.prototype.indexOf.apply(array, [value]);
             };
             hasClass = Element.hasClassName;
             show = Element.show;
@@ -243,11 +304,52 @@
             styleValue = function(e, key) {
               return $(e).getStyle(key);
             };
-          } else if (typeof jQuery !== "undefined" && jQuery !== null) {
+            return {
+              isArray: isArray,
+              isString: isString,
+              isNumber: isNumber,
+              isFunction: isFunction,
+              type: type,
+              elements: elements,
+              element: element,
+              observe: observe,
+              fire: fire,
+              stopEvent: stopEvent,
+              indexOf: indexOf,
+              show: show,
+              hide: hide,
+              toggle: toggle,
+              hasClass: hasClass,
+              addClass: addClass,
+              removeClass: removeClass,
+              domReady: domReady,
+              fieldValue: fieldValue,
+              styleValue: styleValue
+            };
+          })(clue));
+        }
+        if (typeof jQuery !== "undefined" && jQuery !== null) {
+          clue.extend(clue, (function(clue) {
+            var addClass, domReady, element, elements, fieldValue, fire, hasClass, hide, indexOf, isArray, isBoolean, isFunction, isNumber, isRegExp, isString, observe, removeClass, show, stopEvent, styleValue, toggle, type;
+            isArray = jQuery.isArray;
+            isString = function(o) {
+              return jQuery.type(o) === 'string';
+            };
+            isNumber = function(o) {
+              return jQuery.type(o) === 'number';
+            };
+            isFunction = jQuery.isFunction;
+            isBoolean = function(o) {
+              return jQuery.type(o) === 'boolean';
+            };
+            isRegExp = function(o) {
+              return jQuery.type(o) === 'regexp';
+            };
+            type = jQuery.type;
             elements = jQuery;
             element = function(id) {
               var ele;
-              if (!(id != null) || !isString(id) || id.length === 0) {
+              if (!(id != null) || !clue.isString(id) || id.length === 0) {
                 return null;
               }
               if (id.charAt(0) !== '#') {
@@ -265,6 +367,10 @@
             fire = function(ele, event, memo) {
               return jQuery(ele).trigger(event, memo);
             };
+            stopEvent = function(e) {
+              return e.stopPropagation();
+            };
+            indexOf = jQuery.inArray;
             show = function(e) {
               return jQuery(e).show();
             };
@@ -311,11 +417,39 @@
             styleValue = function(e, key) {
               return jQuery.css(e, key);
             };
-          } else if (typeof ender !== "undefined" && ender !== null) {
+            return {
+              isArray: isArray,
+              isString: isString,
+              isNumber: isNumber,
+              isFunction: isFunction,
+              isBoolean: isBoolean,
+              isRegExp: isRegExp,
+              type: type,
+              elements: elements,
+              element: element,
+              observe: observe,
+              fire: fire,
+              stopEvent: stopEvent,
+              indexOf: indexOf,
+              show: show,
+              hide: hide,
+              toggle: toggle,
+              hasClass: hasClass,
+              addClass: addClass,
+              removeClass: removeClass,
+              domReady: domReady,
+              fieldValue: fieldValue,
+              styleValue: styleValue
+            };
+          })(clue));
+        }
+        if (typeof ender !== "undefined" && ender !== null) {
+          clue.extend(clue, (function(clue) {
+            var addClass, domReady, element, elements, fieldValue, fire, formSerializers, hasClass, hide, observe, removeClass, show, styleValue, toggle;
             elements = ender;
             element = function(id) {
               var ele;
-              if (!(id != null) || !isString(id) || id.length === 0) {
+              if (!(id != null) || !clue.isString(id) || id.length === 0) {
                 return null;
               }
               if (id.charAt(0) !== '#') {
@@ -438,46 +572,26 @@
                 button: valueSelector
               };
             })();
-          } else {
-            throw "Clue.js must have one of Prototype, jQuery or Ender available in the execution environment";
-          }
-          return {
-            isFunction: isFunction,
-            isString: isString,
-            isArray: isArray,
-            isRegex: isRegex,
-            toArray: toArray,
-            elements: elements,
-            element: element,
-            observe: observe,
-            fire: fire,
-            bind: bind,
-            hasClass: hasClass,
-            show: show,
-            hide: hide,
-            toggle: toggle,
-            isVisible: isVisible,
-            addClass: addClass,
-            removeClass: removeClass,
-            toggleClass: toggleClass,
-            invoke: invoke,
-            each: each,
-            domReady: domReady,
-            styleValue: styleValue,
-            extend: extend,
-            fieldValue: fieldValue,
-            trim: trim,
-            isInt: isInt,
-            isFloat: isFloat,
-            delayed: delayed,
-            cumulativeDelayed: cumulativeDelayed
-          };
-        })();
-        clue._meta = {
-          version: '0.1',
-          author: 'Rod Vagg <rod@vagg.org> @rvagg',
-          description: 'Simple unified utility interface to a variety of popular JavaScript libraries'
-        };
+            return {
+              elements: elements,
+              element: element,
+              observe: observe,
+              fire: fire,
+              show: show,
+              hide: hide,
+              toggle: toggle,
+              hasClass: hasClass,
+              addClass: addClass,
+              removeClass: removeClass,
+              domReady: domReady,
+              fieldValue: fieldValue,
+              styleValue: styleValue
+            };
+          })(clue));
+        }
+        if (!(clue.element != null)) {
+          throw "Clue.js must have one of Prototype, jQuery or Ender available in the execution environment";
+        }
         return clue;
       });
       return module.exports;
@@ -917,7 +1031,7 @@
             this.regex = new RegExp(options);
             options = {};
           }
-          if (u.isRegex(options)) {
+          if (u.isRegExp(options)) {
             this.regex = options;
             options = {};
           }
@@ -928,7 +1042,7 @@
             if (u.isString(this.options.regex)) {
               this.regex = new RegExp(this.options.regex, this.options.options != null ? this.options.options : '');
             }
-            if (u.isRegex(this.options.regex)) {
+            if (u.isRegExp(this.options.regex)) {
               this.regex = this.options.regex;
             }
           }
