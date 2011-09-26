@@ -45,8 +45,7 @@ testCase(MethodsEventTest, "custom event", function() {
 MethodsSimpleElementsActionsTest = new TestCase("MethodsSimpleElementsActionsTest");
 testCase(MethodsSimpleElementsActionsTest, "show", function() {
   /*:DOC += <div><p id="testElement" style="display: none;">A paragraph element</p><ul><li class="l">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('display:none', spacelessStyle('testElement'));
   r = rule.show('#testElement');
   r.trigger();
@@ -54,8 +53,7 @@ testCase(MethodsSimpleElementsActionsTest, "show", function() {
 });
 testCase(MethodsSimpleElementsActionsTest, "show, multi-element", function() {
   /*:DOC += <div><p id="testElement" style="display: none;">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo" style="display: none;">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('display:none', spacelessStyle('testElement'));
   assertEquals('display:none', spacelessStyle('firstli'));
   r = rule.show('#testElement,ul li:first-child');
@@ -65,8 +63,7 @@ testCase(MethodsSimpleElementsActionsTest, "show, multi-element", function() {
 });
 testCase(MethodsSimpleElementsActionsTest, "hide", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li class="l">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('', spacelessStyle('testElement'));
   r = rule.hide('#testElement');
   r.trigger();
@@ -74,8 +71,7 @@ testCase(MethodsSimpleElementsActionsTest, "hide", function() {
 });
 testCase(MethodsSimpleElementsActionsTest, "hide, multi-element", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('', spacelessStyle('testElement'));
   assertEquals('', spacelessStyle('firstli'));
   r = rule.hide('#testElement,ul li:first-child');
@@ -85,8 +81,7 @@ testCase(MethodsSimpleElementsActionsTest, "hide, multi-element", function() {
 });
 testCase(MethodsSimpleElementsActionsTest, "toggle", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li class="l">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('', spacelessStyle('testElement'));
   r = rule.toggle('#testElement');
   r.trigger();
@@ -98,8 +93,7 @@ testCase(MethodsSimpleElementsActionsTest, "toggle", function() {
 });
 testCase(MethodsSimpleElementsActionsTest, "toggle, multi-element", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('', spacelessStyle('testElement'));
   assertEquals('', spacelessStyle('firstli'));
   r = rule.toggle('#testElement, ul li');
@@ -115,8 +109,7 @@ testCase(MethodsSimpleElementsActionsTest, "toggle, multi-element", function() {
 });
 testCase(MethodsSimpleElementsActionsTest, "addClass simple", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('', classNames('testElement'));
   r = rule.addClass('#testElement', 'newClass');
   r.trigger();
@@ -126,8 +119,7 @@ testCase(MethodsSimpleElementsActionsTest, "addClass simple", function() {
 });
 testCase(MethodsSimpleElementsActionsTest, "addClass simple, multi-element", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('', classNames('testElement'));
   assertEquals('l', classNames('firstli'));
   r = rule.addClass('#testElement, #firstli', 'newClass');
@@ -140,8 +132,7 @@ testCase(MethodsSimpleElementsActionsTest, "addClass simple, multi-element", fun
 });
 testCase(MethodsSimpleElementsActionsTest, "addClass to existing class", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('l', classNames('firstli'));
   r = rule.addClass('#firstli', 'newClass');
   r.trigger();
@@ -151,8 +142,7 @@ testCase(MethodsSimpleElementsActionsTest, "addClass to existing class", functio
 });
 testCase(MethodsSimpleElementsActionsTest, "removeClass from existing", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('l', classNames('firstli'));
   r = rule.removeClass('#firstli', 'l');
   r.trigger();
@@ -162,8 +152,7 @@ testCase(MethodsSimpleElementsActionsTest, "removeClass from existing", function
 });
 testCase(MethodsSimpleElementsActionsTest, "removeClass from existing, multi-element", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l">one</li><li class="l">two</li><li>notme!</li><li class="l" id="lastli">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('l', classNames('firstli'));
   assertEquals('l', classNames('lastli'));
   r = rule.removeClass('li', 'l');
@@ -176,8 +165,7 @@ testCase(MethodsSimpleElementsActionsTest, "removeClass from existing, multi-ele
 });
 testCase(MethodsSimpleElementsActionsTest, "removeClass from existing leaving others intact", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('l leaveme leavemetoo', classNames('firstli'));
   r = rule.removeClass('#firstli', 'l');
   r.trigger();
@@ -187,8 +175,7 @@ testCase(MethodsSimpleElementsActionsTest, "removeClass from existing leaving ot
 });
 testCase(MethodsSimpleElementsActionsTest, "removeClass from element without", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('', classNames('testElement'));
   r = rule.removeClass('#testElement', 'l');
   r.trigger();
@@ -196,8 +183,7 @@ testCase(MethodsSimpleElementsActionsTest, "removeClass from element without", f
 });
 testCase(MethodsSimpleElementsActionsTest, "toggleClass simple", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('', classNames('testElement'));
   r = rule.toggleClass('#testElement', 'aClass');
   r.trigger();
@@ -209,8 +195,7 @@ testCase(MethodsSimpleElementsActionsTest, "toggleClass simple", function() {
 });
 testCase(MethodsSimpleElementsActionsTest, "toggleClass simple, multi-element", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('', classNames('testElement'));
   assertEquals('l leaveme leavemetoo', classNames('firstli'));
   r = rule.toggleClass('#testElement, li', 'aClass');
@@ -226,8 +211,7 @@ testCase(MethodsSimpleElementsActionsTest, "toggleClass simple, multi-element", 
 });
 testCase(MethodsSimpleElementsActionsTest, "toggleClass with other classes", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   assertEquals('l leaveme leavemetoo', classNames('firstli'));
   r = rule.toggleClass('#firstli', 'aClass');
   r.trigger();
@@ -240,43 +224,37 @@ testCase(MethodsSimpleElementsActionsTest, "toggleClass with other classes", fun
 MethodsSimpleElementsConditionsTest = new TestCase("MethodsSimpleElementsConditionsTest");
 testCase(MethodsSimpleElementsConditionsTest, "hasClass yes", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   r = rule.hasClass('#firstli', 'l');
   return assertTrue(r.satisfied());
 });
 testCase(MethodsSimpleElementsConditionsTest, "hasClass no, but has others", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   r = rule.hasClass('#firstli', 'x');
   return assertFalse(r.satisfied());
 });
 testCase(MethodsSimpleElementsConditionsTest, "hasClass no, classless", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   r = rule.hasClass('#testElement', 'x');
   return assertFalse(r.satisfied());
 });
 testCase(MethodsSimpleElementsConditionsTest, "hasClass, multi element, yes", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li class="l">notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   r = rule.hasClass('li', 'l');
   return assertTrue(r.satisfied());
 });
 testCase(MethodsSimpleElementsConditionsTest, "hasClass, multi element, no, none have class", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li class="l">notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   r = rule.hasClass('li', 'x');
   return assertFalse(r.satisfied());
 });
 testCase(MethodsSimpleElementsConditionsTest, "hasClass, multi element, no, but one has class", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><ul><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li class="l">notme!</li><li class="l">three</li></div> */
-	;
-  var r;
+	;  var r;
   r = rule.hasClass('li', 'leaveme');
   return assertFalse(r.satisfied());
 });
@@ -1689,8 +1667,7 @@ testCase(ClassValidatorEmailTest, "invalid emails, shouldn't be satisfied", func
 SimpleFunctionalTest = new TestCase("SimpleFunctionalTest");
 testCase(SimpleFunctionalTest, "simple functional test", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><p id="para" style="display: none;">just a paragraph.</p><ul id="ul"><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var li, lis, para, testElement, _i, _j, _k, _l, _len, _len2, _len3, _len4, _results;
+	;  var li, lis, para, testElement, _i, _j, _k, _l, _len, _len2, _len3, _len4, _results;
   rule(function() {
     return this.define('simple functional test', this.on(this.event('#testElement', 'test:event')), this["do"](this.toggle('li, #para')));
   });
@@ -1726,8 +1703,7 @@ testCase(SimpleFunctionalTest, "simple functional test", function() {
 SimpleConditionalFunctionalTest = new TestCase("SimpleConditionalFunctionalTest");
 testCase(SimpleConditionalFunctionalTest, "simple functional test", function() {
   /*:DOC += <div><p id="testElement">A paragraph element</p><p id="para" style="display: none;">just a paragraph.</p><ul id="ul"><li id="firstli" class="l leaveme leavemetoo">one</li><li class="l">two</li><li>notme!</li><li class="l">three</li></div> */
-	;
-  var li, lis, para, testElement, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _results;
+	;  var li, lis, para, testElement, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _results;
   rule(function() {
     return this.define('simple functional test', this.on(this.event('#testElement', 'test:event')), this.when(this.hasClass('#firstli', 'toggleable')), this["do"](this.toggle('li, #para')));
   });

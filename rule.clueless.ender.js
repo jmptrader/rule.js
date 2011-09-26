@@ -16,7 +16,7 @@
       return this[name] = definition();
     }
   })('rule', function() {
-    var rule;
+    var rule, _fail, _no, _yes;
     rule = function(f) {
       return rule.U.bind(f, rule)(rule);
     };
@@ -27,7 +27,10 @@
       version: '0.1',
       author: 'Rod Vagg <rod@vagg.org> @rvagg'
     };
-    if ((typeof ender !== "undefined" && ender !== null) && (ender.clue != null)) {
+    _yes = 'yes';
+    _no = 'no';
+    _fail = 'fail';
+    if ((typeof ender != "undefined" && ender !== null) && (ender.clue != null)) {
       rule.U = $.clue;
     } else {
       throw "Must have Ender installed with Clue.js added for $.clue / ender.clue";
@@ -112,18 +115,25 @@
           return this.actionsOtherwise.push(a);
         };
         Root.prototype.trigger = function(e, event) {
-          return this["invokeActions" + (this.conditionsSatisfied(e, event) ? '' : 'Otherwise')](e, event);
+          c = this.conditionsSatisfied(e, event);
+          if (c !== _fail) {
+            return this["invokeActions" + (c === _yes ? '' : 'Otherwise')](e, event);
+          }
         };
         Root.prototype.conditionsSatisfied = function(e, event) {
-          var c, _i, _len, _ref;
+          var cond, _i, _len, _ref;
           _ref = this.conditions;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            c = _ref[_i];
-            if (!c.satisfied(e, event)) {
-              return false;
+            cond = _ref[_i];
+            c = cond.satisfied(e, event);
+            if (u.isBoolean(c)) {
+              c = c ? _yes : _no;
+            }
+            if (c !== _yes) {
+              return c;
             }
           }
-          return true;
+          return _yes;
         };
         Root.prototype.invokeActions = function(e, event) {
           return u.invoke(this.actions, 'trigger', e, event);
@@ -134,10 +144,10 @@
         return Root;
       })();
       c.Condition = (function() {
-        __extends(Condition, c.Base);
         function Condition() {
           Condition.__super__.constructor.apply(this, arguments);
         }
+        __extends(Condition, c.Base);
         Condition.prototype.toString = function() {
           return 'Condition';
         };
@@ -178,10 +188,10 @@
         return ConditionAnd;
       })();
       c.ConditionOr = (function() {
-        __extends(ConditionOr, c.ConditionAnd);
         function ConditionOr() {
           ConditionOr.__super__.constructor.apply(this, arguments);
         }
+        __extends(ConditionOr, c.ConditionAnd);
         ConditionOr.prototype.conditionsSatisfied = function(e, event) {
           var c, _i, _len, _ref;
           _ref = this.conditions;
@@ -217,6 +227,33 @@
           return 'When';
         };
         return When;
+      })();
+      c.Must = (function() {
+        function Must() {
+          Must.__super__.constructor.apply(this, arguments);
+        }
+        __extends(Must, c.Base);
+        Must.prototype.setCondition = function(childCondition) {
+          this.childCondition = childCondition;
+          if ((this.parent != null) && u.isFunction(this.parent.setCondition)) {
+            return this.parent.setCondition(this);
+          }
+        };
+        Must.prototype.satisfied = function() {
+          var s;
+          if ((this.childCondition != null) && u.isFunction(this.childCondition.satisfied)) {
+            s = this.childCondition.satisfied();
+            if (s === false || s === _no) {
+              return _fail;
+            }
+            return s;
+          }
+          return _yes;
+        };
+        Must.prototype.toString = function() {
+          return 'Must';
+        };
+        return Must;
       })();
       c.SimpleElementsCondition = (function() {
         __extends(SimpleElementsCondition, c.Condition);
@@ -288,10 +325,10 @@
         return CustomEvent;
       })();
       c.Otherwise = (function() {
-        __extends(Otherwise, c.Base);
         function Otherwise() {
           Otherwise.__super__.constructor.apply(this, arguments);
         }
+        __extends(Otherwise, c.Base);
         Otherwise.prototype.setAction = function() {
           return this.setActionOtherwise.apply(this, arguments);
         };
@@ -301,10 +338,10 @@
         return Otherwise;
       })();
       c.Action = (function() {
-        __extends(Action, c.Base);
         function Action() {
           Action.__super__.constructor.apply(this, arguments);
         }
+        __extends(Action, c.Base);
         Action.prototype.toString = function() {
           return 'Action';
         };
@@ -312,7 +349,14 @@
           Action.__super__.connect.call(this, r);
           return this.setAction(this);
         };
-        Action.prototype.trigger = function() {};
+        Action.prototype.trigger = function() {
+          var _ref;
+          if (u.isFunction((_ref = this.child) != null ? _ref.trigger : void 0)) {
+            return this.child.trigger(this);
+          } else if (u.isFunction(this.child)) {
+            return this.child(this);
+          }
+        };
         return Action;
       })();
       c.SimpleElementsAction = (function() {
@@ -345,15 +389,19 @@
           this.options = u.extend(defaultOptions, options);
         }
         ValidatorBase.prototype.satisfied = function() {
-          var value, values, _i, _len;
+          var valid, value, values, _i, _len;
           values = this.fieldValues();
           for (_i = 0, _len = values.length; _i < _len; _i++) {
             value = values[_i];
-            if (this.valid(value)) {
+            valid = this.valid(value);
+            if (this.options.all === true && !valid) {
+              return false;
+            }
+            if (this.options.all !== true && valid) {
               return true;
             }
           }
-          return false;
+          return this.options.all === true;
         };
         ValidatorBase.prototype.fieldValues = function() {
           var values;
@@ -519,11 +567,13 @@
         otherwise: 'Otherwise',
         "when": 'When',
         validate: 'When',
+        must: 'Must',
         "and": 'ConditionAnd',
         "or": 'ConditionOr',
         required: 'ValidatorRequired',
         "int": 'ValidatorInteger',
         "float": 'ValidatorFloat',
+        regex: 'ValidatorRegex',
         event: 'CustomEvent',
         click: 'Event',
         change: 'Event',
@@ -555,6 +605,14 @@
         toggleClass: {
           "class": 'SimpleElementsAction',
           curry: [r.U.toggleClass]
+        },
+        toggleClasses: {
+          "class": 'SimpleElementsAction',
+          curry: [r.U.toggleClasses]
+        },
+        fire: {
+          "class": 'SimpleElementsAction',
+          curry: [r.U.fire]
         },
         run: 'Action',
         hasClass: {

@@ -5,6 +5,8 @@ on: 'Base'
 otherwise: 'Otherwise'
 "when": 'When'
 validate: 'When'
+#TODO: test:
+must: 'Must'
 
 "and": 'ConditionAnd'
 "or": 'ConditionOr'
@@ -12,6 +14,7 @@ validate: 'When'
 required: 'ValidatorRequired'
 "int": 'ValidatorInteger'
 "float": 'ValidatorFloat'
+regex: 'ValidatorRegex'
 
 event: 'CustomEvent'
 click: 'Event'
@@ -25,6 +28,9 @@ toggle: { class: 'SimpleElementsAction', curry: [ r.U.toggle ] }
 addClass: { class: 'SimpleElementsAction', curry: [ r.U.addClass ] }
 removeClass: { class: 'SimpleElementsAction', curry: [ r.U.removeClass ] }
 toggleClass: { class: 'SimpleElementsAction', curry: [ r.U.toggleClass ] }
+#TODO: test
+toggleClasses: { class: 'SimpleElementsAction', curry: [ r.U.toggleClasses ] }
+fire: { class: 'SimpleElementsAction', curry: [ r.U.fire ] }
 
 run: 'Action'
 

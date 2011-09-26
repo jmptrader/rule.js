@@ -7,6 +7,7 @@ rule.C = {}
 	#= require "ClassConditionAnd"
 	#= require "ClassConditionOr"
 	#= require "ClassWhen"
+	#= require "ClassMust"
 	#= require "ClassSimpleElementsCondition"
 	#= require "ClassEvent"
 	#= require "ClassCustomEvent"

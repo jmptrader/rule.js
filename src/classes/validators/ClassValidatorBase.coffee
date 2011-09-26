@@ -5,8 +5,13 @@ class c.ValidatorBase extends c.Condition
 		@options = u.extend defaultOptions, options
 	satisfied: ->
 		values = @fieldValues()
-		return yes for value in values when @valid(value)
-		no
+		for value in values
+			valid = @valid(value)
+			if @options.all is yes and not valid
+				return no
+			if @options.all isnt yes and valid
+				return yes
+		@options.all is yes
 	fieldValues: ->
 		values = u.fieldValue u.elements(@elements)
 		values = [values] if not u.isArray values
