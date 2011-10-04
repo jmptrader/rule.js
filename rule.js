@@ -757,11 +757,12 @@
         }
         __extends(ConditionOr, c.ConditionAnd);
         ConditionOr.prototype.conditionsSatisfied = function(e, event) {
-          var c, _i, _len, _ref;
+          var cond, _i, _len, _ref;
           _ref = this.conditions;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            c = _ref[_i];
-            if (c.satisfied(e, event)) {
+            cond = _ref[_i];
+            c = cond.satisfied(e, event);
+            if (c === true || c === _yes) {
               return true;
             }
           }
@@ -1182,6 +1183,10 @@
         hasClass: {
           "class": 'SimpleElementsCondition',
           curry: [r.U.hasClass]
+        },
+        visible: {
+          "class": 'SimpleElementsCondition',
+          curry: [r.U.isVisible]
         }
       };
       _results = [];

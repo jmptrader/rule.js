@@ -35,3 +35,4 @@ fire: { class: 'SimpleElementsAction', curry: [ r.U.fire ] }
 run: 'Action'
 
 hasClass: { class: 'SimpleElementsCondition', curry: [ r.U.hasClass ] }
+visible: { class: 'SimpleElementsCondition', curry: [ r.U.isVisible ] }
